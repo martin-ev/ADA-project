@@ -1,4 +1,4 @@
-# Who feeds the world ? And does it pay ?
+# Who feeds the world ? And how wealthy are they ?
 
 # Abstract
 Our main goal in this project is to find social and economics relations in the countries based on the state of their agriculture, i.e. imports, exports, productions, self-sufficiency, etc. In order to do that, we would like to use the data from the "Global Food & Agriculture Statistics" datasets. First, we would like to produce a map showing which countries feed each other. That map would contain a slider to show how this evolved over the past fifty years. Then we would like to show the level of food self-sufficiency. We will also compare it to nations' economic development and see if some correlations can be found. We will visualize our findings with interactive maps and plots. 
