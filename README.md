@@ -13,5 +13,10 @@ We would like to work on the following research questions:
 Our main dataset would be a subset of the "Global Food & Agriculture Statistics" we have seen in the proposed datasets list. In this dataset, we have seen that we could work with the import and export quantities per year and per country. We would also like to study the price of the food in relation with it. 
 
 # A list of internal milestones up until project milestone 2
+- Data import and cleansing
+- Data exploration and primary visualisation
+- Ideas and questions refinment
+- Data visualisation and results production
 
 # Questions for TAs
+- What tool can we use to share our results? 
