@@ -14,5 +14,6 @@ List the dataset(s) you want to use, and some ideas on how do you expect to get,
 * Data exploration and primary visualisation
 * Ideas and questions refinment
 * Data visualisation and results production
-# Questions for TAa
-* What tool can we use to share our results
+
+# Questions for TAs
+* What tool can we use to share our results?
