@@ -1,1 +1,5 @@
-Scripts/Data
+.gitignore
+Scripts/Data/*
+Scripts/.ipynb_checkpoints/*
+Scripts/__pycache__/*
+.git
