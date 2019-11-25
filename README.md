@@ -25,7 +25,7 @@ This database countains several files. We had a look of all the files. For food-
 - `Production_Livestock_E_All_Data_(Normalized).csv` contains data about **livestock production**.
 - `Trade_LiveAnimals_E_All_Data_(Normalized).csv` contains data about **live animals trade**.
 
-For food-related data about countries, we decided to focus on the following files:
+For economic data about countries, we decided to focus on the following files:
 - `ConsumerPriceIndices_E_All_Data_(Normalized).csv` contains data about **consumer price indices (CPI)**.
 - `Macro-Statistics_Key_Indicators_E_All_Data_(Normalized).csv` contains data about **gross domestic product (GDP)** along with other macroeconomic indicators.
 
