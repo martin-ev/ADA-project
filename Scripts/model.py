@@ -151,7 +151,7 @@ def main():
 
         'target' : '(GDP, million $)',
         'name of target': 'GDP',
-        'pearson correlation threshold': 0.7,
+        'pearson correlation threshold': 0.4,
         'inter correlation threshold': 0.9, 
         'nb_fold_CV': 5, 
         'degree augmentation': 1
@@ -162,37 +162,43 @@ def main():
     }
 
     covariates_df, target_variables_df = create_target_and_covariate_df('final_df_ada.pkl')
-    print('covaraites_df shape', covariates_df.shape)
-    covariates_df = feature_augmentation(2, covariates_df)
-    #print('list of all features', list(covariates_df.columns.values))
+    summed_covariates_df = covariates_df.sum()
+    keys = summed_covariates_df.keys()
+    values = summed_covariates_df.values
+    
+    sorted_keys = [key for _,key in sorted(zip(values,keys))]
+
+    covariates_df = covariates_df[sorted_keys[-30:]]
+    
+    # covariates_df = feature_augmentation(2, covariates_df)
+    print('list of all features', list(covariates_df.columns.values))
     list_selected_features_GDP = drop_feature_pearson_correlation(params['pearson correlation threshold'], target_variables_df[params['target']], params['name of target'], covariates_df)
     print('amount of selected features', len(list_selected_features_GDP))
     print('selected features', list_selected_features_GDP)
-    # #print('list of selected features', list_selected_features_GDP)
-    # covariate_reduced_df = covariates_df[list_selected_features_GDP[:-1]]
+    covariate_reduced_df = covariates_df[list_selected_features_GDP[:-1]]
 
-    # covariate_reduced_df = drop_too_corelated_featues(params['inter correlation threshold'], covariate_reduced_df)
-
+    covariate_reduced_df = drop_too_corelated_featues(params['inter correlation threshold'], covariate_reduced_df)
+    print('list of selected features after reduction', list(covariate_reduced_df.columns.values))
     # covariate_reduced_df = feature_augmentation(params['degree augmentation'], covariate_reduced_df)
 
-    # # selected_features = RFECV_lasso_2(covariate_reduced_df, target_variables_df[[params['target']]], random = RANDOM_SEED)
-    # # selected_covariate = covariate_reduced_df[selected_features]
+    # selected_features = RFECV_lasso_2(covariate_reduced_df, target_variables_df[[params['target']]], random = RANDOM_SEED)
+    # selected_covariate = covariate_reduced_df[selected_features]
 
-    # regularisation_parameters = np.linspace(start = 0.001, stop= 3, num = 20)
+    regularisation_parameters = np.linspace(start = 0.01, stop= 1, num = 20)
 
-    
+    # covariate_reduced_df = covariate_reduced_df[list(selected_covariate.columns.values)]
 
-    # target_df = target_variables_df[params['target']]
+    target_df = target_variables_df[params['target']]
 
-    # nb_fold_CV = params['nb_fold_CV']
+    nb_fold_CV = params['nb_fold_CV']
 
-    # param_lasso = fit_model_lasso(regularisation_parameters, covariate_reduced_df, target_df, nb_fold_CV = nb_fold_CV )
+    param_lasso = fit_model_lasso(regularisation_parameters, covariate_reduced_df, target_df, nb_fold_CV = nb_fold_CV )
 
-    # keys = list(covariate_reduced_df.columns.values)
-    # #keys = selected_features
-    # values = param_lasso
+    keys = list(covariate_reduced_df.columns.values)
+    #keys = selected_features
+    values = param_lasso
    
-    # print(dict(zip(keys, values)))
+    print(dict(zip(keys, values)))
 
 
 
