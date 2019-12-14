@@ -77,7 +77,7 @@ def split_and_standardization_dataset(target_variables, covariates, test_size, r
     '''
     target_variables_numpy = target_variables.to_numpy()
     covariates_numpy = covariates.to_numpy()
-    X_train, X_test, Y_train, Y_test = train_test_split(covariates, target_variables_numpy, test_size=test_size, random_state = random)
+    X_train, X_test, Y_train, Y_test = train_test_split(covariates_numpy, target_variables_numpy, test_size=test_size, random_state = random)
     scaler = preprocessing.StandardScaler().fit(X_train)
     X_train_normalized = scaler.transform(X_train)
     X_test_normalized = scaler.transform(X_test)
@@ -162,13 +162,66 @@ def main():
     }
 
     covariates_df, target_variables_df = create_target_and_covariate_df('final_df_ada.pkl')
-    summed_covariates_df = covariates_df.sum()
-    keys = summed_covariates_df.keys()
-    values = summed_covariates_df.values
-    
-    sorted_keys = [key for _,key in sorted(zip(values,keys))]
+    target_variables_df.to_pickle('target.pkl')
 
-    covariates_df = covariates_df[sorted_keys[-30:]]
+    ### Below we are going to select the top 20 features in production:
+
+    Production_cov_df = covariates_df.filter(regex= 'production|Production')
+    summed_df = Production_cov_df.sum()
+    keys = summed_df.keys()
+    values = summed_df.values
+    sorted_keys = [key for _,key in sorted(zip(values,keys))]
+    Production_cov_df = Production_cov_df[sorted_keys[-20:]]
+    selected_features_production = list(Production_cov_df.columns.values) # Selected features for top 20 prod features in volumne
+
+    cropped_word_selected_prod = [" ".join(string.split()[:-3]) for string in selected_features_production] # Same as the list above with only the important words kept
+
+
+    
+
+   #-------------------------Below we are selecting the features in export that have been selected previously with the production--------------------------------------
+    export_df = covariates_df.filter(regex= 'export')
+    
+
+    columns_to_keep_export = []
+
+    for column_export in list(export_df.columns.values):
+
+        for columns_prod in cropped_word_selected_prod:
+
+            if columns_prod in column_export:
+
+                columns_to_keep_export.append(column_export)
+
+
+    #-------------------------Below we are selecting the features in import that have been selected previously with the production--------------------------------------
+    import_df = covariates_df.filter(regex= 'import')
+    
+
+    columns_to_keep_import = []
+
+    for column_import in list(import_df.columns.values):
+
+        for columns_prod in cropped_word_selected_prod:
+
+            if columns_prod in column_import:
+
+                columns_to_keep_import.append(column_import)
+
+    
+
+
+    final_features_kept = selected_features_production + columns_to_keep_export + columns_to_keep_import  # All the selected features
+    print('final features', final_features_kept)
+
+    # summed_covariates_df = covariates_df.sum()
+    # keys = summed_covariates_df.keys()
+    # values = summed_covariates_df.values
+    
+    # sorted_keys = [key for _,key in sorted(zip(values,keys))]
+
+    # covariates_df = covariates_df[sorted_keys[-30:]]
+    covariates_df = covariates_df[final_features_kept]
     
     # covariates_df = feature_augmentation(2, covariates_df)
     print('list of all features', list(covariates_df.columns.values))
@@ -178,6 +231,7 @@ def main():
     covariate_reduced_df = covariates_df[list_selected_features_GDP[:-1]]
 
     covariate_reduced_df = drop_too_corelated_featues(params['inter correlation threshold'], covariate_reduced_df)
+    covariate_reduced_df.to_pickle("reduced_df_2.pkl")
     print('list of selected features after reduction', list(covariate_reduced_df.columns.values))
     # covariate_reduced_df = feature_augmentation(params['degree augmentation'], covariate_reduced_df)
 
