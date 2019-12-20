@@ -3,3 +3,4 @@ Scripts/Data/*
 Scripts/.ipynb_checkpoints/*
 Scripts/__pycache__/*
 .git
+older versions/*
